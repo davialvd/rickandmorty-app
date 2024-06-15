@@ -1,9 +1,11 @@
+// servidor.js
+
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
 
 const app = express();
-const puerto = 3000;
+const puerto = process.env.PORT || 3000;
 
 // Servir archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, 'public')));
