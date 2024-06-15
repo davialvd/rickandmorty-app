@@ -1,9 +1,20 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const respuesta = await fetch('/api/personajes');
-    const datos = await respuesta.json();
+    const apiUrl = 'https://rickandmortyapi.com/api/character';
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        mostrarPersonajes(data);
+    } catch (error) {
+        console.error('Error al cargar los personajes:', error);
+    }
+});
+
+function mostrarPersonajes(data) {
     const contenedorPersonajes = document.getElementById('personajes');
   
-    datos.results.forEach(personaje => {
+    data.results.forEach(personaje => {
       const tarjetaPersonaje = document.createElement('div');
       tarjetaPersonaje.classList.add('col-md-4', 'mb-4');
       tarjetaPersonaje.innerHTML = `
@@ -19,5 +30,4 @@ document.addEventListener('DOMContentLoaded', async () => {
       `;
       contenedorPersonajes.appendChild(tarjetaPersonaje);
     });
-  });
-  
+}
