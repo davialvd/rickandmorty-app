@@ -1,26 +1,33 @@
-// servidor.js
+document.addEventListener('DOMContentLoaded', async () => {
+    const apiUrl = 'https://rickandmortyapi.com/api/character';
 
-const express = require('express');
-const path = require('path');
-const axios = require('axios');
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-const app = express();
-const puerto = process.env.PORT || 3000;
-
-// Servir archivos estáticos desde la carpeta "public"
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Endpoint para obtener personajes de Rick and Morty
-app.get('/api/personajes', async (req, res) => {
-  try {
-    const respuesta = await axios.get('https://rickandmortyapi.com/api/character');
-    res.json(respuesta.data);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
+        mostrarPersonajes(data);
+    } catch (error) {
+        console.error('Error al cargar los personajes:', error);
+    }
 });
 
-// Iniciar el servidor
-app.listen(puerto, () => {
-  console.log(`Servidor corriendo en http://localhost:${puerto}`);
-});
+function mostrarPersonajes(data) {
+    const contenedorPersonajes = document.getElementById('personajes');
+  
+    data.results.forEach(personaje => {
+      const tarjetaPersonaje = document.createElement('div');
+      tarjetaPersonaje.classList.add('col-md-4', 'mb-4');
+      tarjetaPersonaje.innerHTML = `
+        <div class="card">
+          <img src="${personaje.image}" class="card-img-top" alt="${personaje.name}">
+          <div class="card-body">
+            <h5 class="card-title">${personaje.name}</h5>
+            <p class="card-text">Estado: ${personaje.status}</p>
+            <p class="card-text">Especie: ${personaje.species}</p>
+            <p class="card-text">Género: ${personaje.gender}</p>
+          </div>
+        </div>
+      `;
+      contenedorPersonajes.appendChild(tarjetaPersonaje);
+    });
+}
